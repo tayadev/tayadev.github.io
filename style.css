@@ -1,0 +1,67 @@
+html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    height: 100%;
+    display: grid;
+    place-content: center;
+    font-family: monospace;
+    font-size: large;
+    background-color: #1a1a1a;
+    color: white;
+    margin-inline: 5%;
+}
+
+section  {
+    margin-block: 1em;
+}
+
+h1 {
+    color: violet;
+}
+
+h3 {
+    color: #bf4ed3;
+}
+
+h4 {
+    color: #8f5dd1;
+}
+
+a {
+    color: lightblue;
+}
+
+h1, h2, h3, h4 {
+    margin-block: 0.2em;
+}
+
+#links span{
+    display: inline-block;
+    min-width: 23ch;
+}
+
+ul {
+    padding-inline-start: 20px;
+}
+
+li {
+    list-style-type: '- ';
+}
+
+[class*=language-] {
+    background: none !important;
+    font-family: monospace !important;
+    font-size: large !important;
+    padding: 0 !important;
+}
+
+pre[class*=language-] {
+    background: rgba(0, 0, 0, 0.5) !important;
+    padding: 1em !important;
+    border-radius: 1em;
+    width: min-content;
+}

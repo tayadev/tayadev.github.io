@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTLiveChat Ws Api</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/prismjs@v1.x/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h1>YouTube Live Chat Websocket API</h1>
+    <h4>Programmatic reading of youtube live chat made trivial</h4>
+    <br>
+    <h3>Example Usage</h3>
+    <pre id="example"><code class="language-javascript">const ws = new WebSocket('wss://ytc.taya.one/@ChannelHandle')
+
+ws.onmessage = e => {
+    const data = Json.parse(e.data)
+    if(data.type == 'message') {
+        console.log(data.author.name, data.text)
+    }
+}
+</code></pre>
+
+<h3>Disclaimer</h3>
+<p>Do not yet rely on this service, as it still is work in progress,<br> on release it will also be open source and available for self-hosting</p>
+
+   	<script src="https://unpkg.com/prismjs@v1.x/components/prism-core.min.js"></script>
+	<script src="https://unpkg.com/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
