@@ -1,0 +1,93 @@
+[hidden] { display: none !important; }
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+section#fileSelectSection {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background: #673AB7;
+}
+
+section#editSection {
+    height: 100%;
+    background: #E91E63;
+    display: grid;
+    grid-template-rows: auto 10em 4em;
+    place-items: center;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1em; */
+    width: 100%;
+    height: 100%;
+    place-items: center;
+}
+
+textarea {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #E0E0E0;
+    color: black;
+    text-align: center;
+    vertical-align: middle;
+    padding-block: 1em;
+}
+
+textarea:last-of-type {
+    background: #BDBDBD;
+}
+
+canvas {
+    max-width: 100%;
+    height: 100%;
+    max-height: 75vh;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    background: #E91E63;
+    display: inline-block;
+    border-radius: 2em;
+    padding: 1em 2em;
+    cursor: pointer;
+    display: flex;
+    place-items: center;
+    gap: 1em;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.buttons {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.buttons button {
+    border: none;
+    width: 50%;
+    height: 100%;
+    color: white;
+}
+
+#dlButton {
+    background: #66BB6A;
+}
+
+#resetButton {
+    background: #D32F2F;
+}
