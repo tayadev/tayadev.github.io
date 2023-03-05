@@ -58,7 +58,8 @@ a {
 }
 
 article {
-  margin-inline: 1em;
+  margin-inline: auto;
+  max-width: 45em;
 }
 
 .link-group {
