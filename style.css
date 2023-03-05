@@ -1,67 +1,94 @@
-html {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
+:root {
+  --color-accent: #cc3ecc;
+  --color-accent-secondary: #8f5dd1;
+  --color-text: black;
+  --color-text-dark: white;
+  --color-background: white;
+  --color-background-dark: #1a1a1a;
+  --color-surface: #e7dcef;
+  --color-surface-dark: #453659;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: var(--color-text-dark);
+    --color-background: var(--color-background-dark);
+    --color-surface: var(--color-surface-dark);
+  }
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url("Lexend-Regular.ttf");
 }
 
 body {
-    height: 100%;
-    display: grid;
-    place-content: center;
-    font-family: monospace;
-    font-size: large;
-    background-color: #1a1a1a;
-    color: white;
-    margin-inline: 5%;
+  font-family: 'Lexend';
+  color: var(--color-text);
+  background-color: var(--color-background);
+  margin-inline: 1em;
 }
 
-section  {
-    margin-block: 1em;
+header {
+  margin-block: 4em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-h1 {
-    color: violet;
+header h1 {
+  margin-bottom: 0;
+  color: var(--color-accent);
 }
 
-h3 {
-    color: #bf4ed3;
+#pronouns {
+  color: var(--color-accent-secondary);
 }
 
-h4 {
-    color: #8f5dd1;
+section {
+  margin-block: 3em;
+}
+
+section h2 {
+  text-align: center;
 }
 
 a {
-    color: lightblue;
+  color: var(--color-accent-secondary)
 }
 
-h1, h2, h3, h4 {
-    margin-block: 0.2em;
+article {
+  margin-inline: 1em;
 }
 
-#links span{
-    display: inline-block;
-    min-width: 23ch;
+.link-group {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  max-width: 50em;
+  margin-inline: auto;
+  justify-content: center;
 }
 
-ul {
-    padding-inline-start: 20px;
+.link-group a {
+  border: 2px solid var(--color-text);
+  border-radius: 0.5em;
+  padding: 1em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  width: 8em;
+  box-shadow: 0 5px 0 0 var(--color-text);
+  transition: 250ms ease;
+  color: var(--color-text);
+  text-decoration: none;
+  text-align: center;
 }
 
-li {
-    list-style-type: '- ';
-}
-
-[class*=language-] {
-    background: none !important;
-    font-family: monospace !important;
-    font-size: large !important;
-    padding: 0 !important;
-}
-
-pre[class*=language-] {
-    background: rgba(0, 0, 0, 0.5) !important;
-    padding: 1em !important;
-    border-radius: 1em;
-    width: min-content;
+.link-group a:hover {
+  box-shadow: 0 2px 0 0 var(--color-text);
+  transform: translateY(2px);
+  background-color: var(--color-surface);
+  color: var(--color-accent-secondary);
 }
