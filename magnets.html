@@ -35,6 +35,7 @@
         uniform float floatingStrength;
         uniform float R;
         uniform float minDistance;
+        uniform int maxSteps;
 
         void main() {
             vec2 uv = gl_FragCoord.xy / resolution.xy;
@@ -47,7 +48,7 @@
             float K = (fixedStrength * floatingStrength) / 3.141*4.0*8.854;
             
             vec2 pos = uv;
-            for(int i = 0; i < 1000; i++) {
+            for(int i = 0; i < maxSteps; i++) {
                 vec2 Fa = (ra - pos)/ (pow(distance(ra, pos), 3.0)) * K;
                 vec2 Fb = (rb - pos)/ (pow(distance(rb, pos), 3.0)) * K;
                 vec2 Fc = (rc - pos)/ (pow(distance(rc, pos), 3.0)) * K;
@@ -99,6 +100,7 @@
                 floatingStrength: { value: 1.0 },
                 R: { value: 0.1 },
                 minDistance: { value: 0.1 },
+                maxSteps: { value: 1000 },
             },
             vertexShader: document.getElementById('vertexShader').textContent,
             fragmentShader: document.getElementById('fragmentShader').textContent
@@ -123,6 +125,7 @@
         gui.add(material.uniforms.floatingStrength, 'value', 0, 1).name("Floating Strength")
         gui.add(material.uniforms.R, 'value', 0, 1).name('R')
         gui.add(material.uniforms.minDistance, 'value', 0, 1).name("min Distance")
+        gui.add(material.uniforms.maxSteps, 'value').name("max Steps")
         const folderA = gui.addFolder('A')
         folderA.add(material.uniforms.ra.value, 'x', 0, 1)
         folderA.add(material.uniforms.ra.value, 'y', 0, 1)
