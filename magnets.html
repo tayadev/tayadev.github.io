@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Magnet Visualization for Elu</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+</head>
+<style>
+    html, body, #canvas {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+</style>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script type="x-shader/x-vertex" id="vertexShader">
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = vec4(position, 1.0);
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragmentShader">
+        uniform vec2 resolution;
+        uniform float time;
+        uniform vec2 ra;
+        uniform vec2 rb;
+        uniform vec2 rc;
+        uniform float fixedStrength;
+        uniform float floatingStrength;
+        uniform float R;
+        uniform float minDistance;
+
+        void main() {
+            vec2 uv = gl_FragCoord.xy / resolution.xy;
+            vec3 color = vec3(0.0);
+
+            if(distance(ra, uv) < 0.01) color = vec3(1,0,0);
+            if(distance(rb, uv) < 0.01) color = vec3(0,1,0);
+            if(distance(rc, uv) < 0.01) color = vec3(0,0,1);
+
+            float K = (fixedStrength * floatingStrength) / 3.141*4.0*8.854;
+            
+            vec2 pos = uv;
+            for(int i = 0; i < 1000; i++) {
+                vec2 Fa = (ra - pos)/ (pow(distance(ra, pos), 3.0)) * K;
+                vec2 Fb = (rb - pos)/ (pow(distance(rb, pos), 3.0)) * K;
+                vec2 Fc = (rc - pos)/ (pow(distance(rc, pos), 3.0)) * K;
+                vec2 Fres = (Fa + Fb  + Fc) * R;
+
+                pos += Fres;
+
+                if(distance(ra, pos) < minDistance) {
+                    color = vec3(1,0,0);
+                    break;
+                }
+
+                if(distance(rb, pos) < minDistance) {
+                    color = vec3(0,1,0);
+                    break;
+                }
+
+                if(distance(rc, pos) < minDistance) {
+                    color = vec3(0,0,1);
+                    break;
+                }
+            }
+            gl_FragColor = vec4(color, 1.0);
+        }
+    </script>
+
+    <script type="module">
+        import Stats from "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.min.js";
+        var stats = new Stats();
+        stats.showPanel( 0 )
+        document.body.appendChild( stats.dom );
+
+        var scene = new THREE.Scene();
+        var canvas = document.getElementById('canvas');
+        var camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ canvas });
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+        var geometry = new THREE.PlaneGeometry(2,2);
+        var material = new THREE.ShaderMaterial({
+            uniforms: {
+                resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                time: { value: 0.0 },
+                ra: { value: new THREE.Vector2(0.2, 0.3) },
+                rb: { value: new THREE.Vector2(0.8, 0.3) },
+                rc: { value: new THREE.Vector2(0.5, 0.6) },
+                fixedStrength: { value: 1.0 },
+                floatingStrength: { value: 1.0 },
+                R: { value: 0.1 },
+                minDistance: { value: 0.1 },
+            },
+            vertexShader: document.getElementById('vertexShader').textContent,
+            fragmentShader: document.getElementById('fragmentShader').textContent
+        });
+
+        var plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+
+        camera.position.z = 200;
+
+        function animate() {
+            stats.begin();
+            requestAnimationFrame(animate);
+            material.uniforms.time.value += 0.01;
+            renderer.render(scene, camera);
+            stats.end();
+        }
+        animate();
+
+        const gui = new dat.GUI();
+        gui.add(material.uniforms.fixedStrength, 'value', 0, 0.1).name("Fixed Strength");
+        gui.add(material.uniforms.floatingStrength, 'value', 0, 1).name("Floating Strength")
+        gui.add(material.uniforms.R, 'value', 0, 1).name('R')
+        gui.add(material.uniforms.minDistance, 'value', 0, 1).name("min Distance")
+        const folderA = gui.addFolder('A')
+        folderA.add(material.uniforms.ra.value, 'x', 0, 1)
+        folderA.add(material.uniforms.ra.value, 'y', 0, 1)
+        const folderB = gui.addFolder('B')
+        folderB.add(material.uniforms.rb.value, 'x', 0, 1)
+        folderB.add(material.uniforms.rb.value, 'y', 0, 1)
+        const folderC = gui.addFolder('C')
+        folderC.add(material.uniforms.rc.value, 'x', 0, 1)
+        folderC.add(material.uniforms.rc.value, 'y', 0, 1)
+    </script>
+</body>
+</html>
