@@ -43,7 +43,7 @@
       ${() => data.subjects.map((subject, i) => {
         return html`
           <label>${subject.name}</label>
-          <input type="number" min="1" max="6" step="0.5" @input="${e => { data.subjects[i].grade = Number.parseFloat(e.target.value) }}" value="${() => data.subjects[i].grade.toFixed(1)}"/>
+          <input type="number" min="1" max="6" step="0.5" @change="${e => { data.subjects[i].grade = Number.parseFloat(e.target.value) }}" value="${() => data.subjects[i].grade.toFixed(1)}"/>
           <span>${() => points(subject).toFixed(1)}</span>
         `.key(subject.id)
       })}
