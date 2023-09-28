@@ -36,7 +36,7 @@
 
   const average = () => (data.subjects.reduce((s, {grade}) => s + grade, 0) / data.subjects.length).toFixed(1)
   const insufficient = () => data.subjects.filter(s => s.grade < 4).length
-  const negativepoints = () => data.subjects.map(s => points(s)).filter(p => p < 0).reduce((acc, points) => acc + points, 0)
+  const negativepoints = () => data.subjects.map(s => points(s)).filter(p => p < 0).reduce((acc, points) => acc + (-points), 0)
 
   const template = html`
     <div class="subjects">
@@ -51,12 +51,12 @@
     <div class="summary">
       <p class="${() => average() >= 4 || 'failing'}">Average (min 4): </p><p>${() => average()}</p>
       <p class="${() => insufficient() <= 4 || 'failing'}">Insufficient Grades (max 4): </p><p>${() => insufficient()}</p>
-      <p class="${() => negativepoints() > -7 || 'failing'}">Sum of Negative Points (min -7): </p><p>${() => negativepoints()}</p> 
+      <p class="${() => negativepoints() <= 7 || 'failing'}">Sum of Negative Points (max 7): </p><p>${() => negativepoints()}</p> 
     </div>
   `
 
   watch(() => {
-    if(average() >= 4 && insufficient() <= 4 && negativepoints() > -7) {
+    if(average() >= 4 && insufficient() <= 4 && negativepoints() <= 7) {
       appElement.classList.add('passing')
       appElement.classList.remove('failing')
     } else {
