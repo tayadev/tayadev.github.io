@@ -40,6 +40,9 @@
 
   const template = html`
     <div class="subjects">
+      <label><u>Subject</u></label>
+      <span><u>Grade</u></span>
+      <span><u>Points</u></span>
       ${() => data.subjects.map((subject, i) => {
         return html`
           <label>${subject.name}</label>
