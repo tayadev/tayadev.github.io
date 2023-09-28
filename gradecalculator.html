@@ -49,9 +49,9 @@
       })}
     </div>
     <div class="summary">
-      <p class="${() => average() >= 4 || 'failing'}">Average: </p><p>${() => average()}</p>
-      <p class="${() => insufficient() <= 4 || 'failing'}">Insufficient Grades: </p><p>${() => insufficient()}</p>
-      <p class="${() => negativepoints() > -7 || 'failing'}">Sum of Negative Points: </p><p>${() => negativepoints()}</p> 
+      <p class="${() => average() >= 4 || 'failing'}">Average (min 4): </p><p>${() => average()}</p>
+      <p class="${() => insufficient() <= 4 || 'failing'}">Insufficient Grades (max 4): </p><p>${() => insufficient()}</p>
+      <p class="${() => negativepoints() > -7 || 'failing'}">Sum of Negative Points (min -7): </p><p>${() => negativepoints()}</p> 
     </div>
   `
 
