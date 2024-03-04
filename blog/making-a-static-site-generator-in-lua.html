@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Making a static site generator in lua</title>
+  <link rel="preload" href="/Monocraft.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <header>
+    <a href=".."><h1>Taya's Blog</h1></a>
+  </header>
+  
+  <main>
+    <h2>Making a static site generator in lua</h2>
+  
+    <p>
+      <b>Published on:</b> 2024-03-04 <br>
+      <b>Tags:</b> <a href="/blog/tag/programming">Programming</a>, <a href="/blog/tag/lua">Lua</a>
+    </p>
+
+    <br>
+
+    <p>
+      This project came out of me wanting an easy way to author blog posts and write documentation for my projects, and because i am me, i decided to make it myself. So i picked my current programming language of choice, lua, and got going.
+    </p>
+    <p>
+      I wanted it to be simple, i decided it should take a directory full of markdown files, parse them, and insert them into a HTML template.
+    </p>
+    <p>
+      I started by writing a library to parse markdown files into a lua table describing the content. Which i then pipe into a function that takes that content table and writes HTML code to resemble it.
+    </p>
+    
+  </main>
+</body>
+</html>
+
+<style>
+  header {
+    margin-block-start: 0;
+    margin-inline-start: 1em;
+    text-align: start;
+  }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    text-align: start;
+  }
+</style>
