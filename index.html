@@ -4,66 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taya's Webpage</title>
-  <link rel="preload" href="Monocraft.ttf" as="font" type="font/ttf" crossorigin>
+  <script src="webinclude.js"></script>
   <link rel="stylesheet" href="style.css">
-  <meta name="description" content="Taya's personal website">
+  <link rel="icon" href="favicon.ico">
 </head>
 <body>
+  <div id="layout">
+    <web-include src="sidebar.html"></web-include>
+    <main>
+      <h1 class="center" id="title">Welcome to Taya's Webpage</h1>
 
-  <header>
-    <h1>Taya</h1>
-    <p>I do some stuff sometimes</p>  
-  </header>
+      <style>
+        #title-letter {
+          display: inline-block;
+          width: 1ch;
+        }
 
-  <div class="center">
-    <h3>⚠️ This site is under construction, some stuff will be broken</h3>
+        @keyframes wave {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+      </style>
+      <script>
+        title.innerHTML = title.innerText.split("").map((letter, i) => {
+          return `<span id="title-letter" style="animation: wave 1.5s infinite ${i * 0.1}s">${letter}</span>`
+        }).join("")
+      </script>
+
+      <p>
+        Here you can read about me and my endavours, use some tools i made & check out my friends' websites.
+        <br><br>
+        <- Links in the sidebar
+      </p>
+    </main>
   </div>
 
-  <section>
-    <h2>My Links</h2>
-    <div class="buttongroup">
-      <a class="bigbutton" href="mailto://taya@taya.one">E-Mail</a>
-      <a class="bigbutton" href="https://github.com/tayadev">GitHub</a>
-      <a class="bigbutton" href="https://ko-fi.com/tayacrystals">Ko-fi</a>
-      <a class="bigbutton" href="https://twitter.com/TayaCrystals">Twitter</a>
-      <a class="bigbutton" href="pk">PGP Key</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>My Stuff</h2>
-    <div class="buttongroup">
-      <a class="bigbutton" href="about">About Me</a>
-      <a class="bigbutton" href="blog">My Blog</a>
-      <a class="bigbutton" href="https://modrinth.com/user/taya">Minecraft Projects</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>Recent Blog Posts</h2>
-
-    <article class="blogpost">
-      <h3>Making a static site generator in lua</h3>
-      <p>
-        <b>Published on:</b> 2024-03-04 <br>
-        <b>Tags:</b> <a href="blog/tag/programming">Programming</a>, <a href="blog/tag/lua">Lua</a>
-      </p>
-      <p>I set out to make a static site generator in lua to use for things like this blog, this post goes into details about the journey there.</p>
-      <a href="blog/making-a-static-site-generator-in-lua" class="decorated">Read Post</a>
-    </article>
-
-    <article class="blogpost">
-      <h3>Teleporter Network</h3>
-      <p>
-        <b>Published on:</b> 2024-03-04 <br>
-        <b>Tags:</b> <a href="blog/tag/minecraft">Minecraft</a>
-      </p>
-      <p>Ever since I learned about the possibility for wireless redstone in vanilla minecraft, I wanted to make a teleportation system around my world. Here I go into how it works and how you can build something like this in your worlds!</p>
-      <a href="/blog/second-post" class="decorated">Read Post</a>
-    </article>
-
-  </section>
-  
+  <web-include src="footer.html"></web-include>
 </body>
 </html>
-
