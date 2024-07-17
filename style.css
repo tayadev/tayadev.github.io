@@ -12,7 +12,6 @@ body {
   margin: 0 auto;
   padding-top: 100px;
 
-  
   background-image: url("stars.png");
   background-color: #000;
   background-size: 200px;
@@ -20,7 +19,10 @@ body {
   
   font-family: "000webfont";
   font-size: 2em;
-  
+}
+
+ul {
+  list-style-type: "-";
 }
 
 #layout {
