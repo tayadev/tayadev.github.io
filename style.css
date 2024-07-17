@@ -14,7 +14,6 @@ body {
 
   
   background-image: url("stars.png");
-  image-rendering: pixelated;
   background-color: #000;
   background-size: 200px;
   color: #d8f0fc;
