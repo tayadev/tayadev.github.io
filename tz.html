@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taya's Timezone Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #2a2d3a;
+      color: #e8dfe8;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #f5f0f7;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      flex: 1;
+    }
+    
+    .header-buttons {
+      position: absolute;
+      right: 0;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .header-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      color: white;
+      transition: background-color 0.2s;
+    }
+    
+    .header-share-btn {
+      background: #7fb069;
+    }
+    
+    .header-share-btn:hover {
+      background: #6a9b56;
+    }
+    
+    .header-share-btn.copied {
+      background: #7fb3d3;
+    }
+    
+    .header-export-btn {
+      background: #d4a574;
+    }
+    
+    .header-export-btn:hover {
+      background: #c19660;
+    }
+    
+    .header-import-btn {
+      background: #a67fb0;
+    }
+    
+    .header-import-btn:hover {
+      background: #936b9d;
+    }
+    
+    .hidden-file-input {
+      display: none;
+    }
+    
+    .controls {
+      background: #3e4155;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .controls input,
+    .controls select {
+      padding: 10px;
+      border: 1px solid #6b6d7a;
+      border-radius: 4px;
+      margin-right: 10px;
+      width: 200px;
+      background: #4a4d5a;
+      color: #f0ecf2;
+    }
+    
+    .controls input:focus,
+    .controls select:focus {
+      outline: none;
+      border-color: #7fb3d3;
+      background: #555866;
+    }
+    
+    .controls input::placeholder {
+      color: #b8b4c0;
+    }
+    
+    .controls button {
+      padding: 10px 20px;
+      background: #7fb3d3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .controls button:hover {
+      background: #6ba0c4;
+    }
+    
+    .ribbon {
+      display: flex;
+      margin-bottom: 10px;
+      background: #3e4155;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    .label {
+      width: 250px;
+      background: #4e5466;
+      color: #f5f0f7;
+      padding: 15px;
+      font-size: 14px;
+    }
+    
+    .timezone-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .people-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+    
+    .person-tag {
+      display: inline-flex;
+      align-items: center;
+      background: #6b6d7a;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      color: #f0ecf2;
+    }
+    
+    .person-tag:hover {
+      background: #7d7f8c;
+    }
+    
+    .time-strip {
+      display: flex;
+      flex: 1;
+    }
+    
+    .hour {
+      flex: 1;
+      height: 100%;
+      border-right: 1px solid #6b6d7a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #4a4d5a;
+      color: #e8dfe8;
+      font-size: 12px;
+    }
+    
+    .hour:last-child {
+      border-right: none;
+    }
+    
+    .hour.night-hours {
+      background: #3a3d4a;
+      color: #c5bcc5;
+    }
+    
+    .hour.current {
+      background: #7fb3d3 !important;
+      color: white !important;
+      font-weight: bold;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #b8b4c0;
+    }
+    
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .header-buttons {
+        position: static;
+        align-self: center;
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .header-btn {
+        width: 100%;
+        margin: 2px 0;
+      }
+      
+      .controls {
+        text-align: center;
+      }
+      
+      .controls input,
+      .controls select {
+        width: 100%;
+        margin: 5px 0;
+      }
+      
+      .controls button {
+        width: 100%;
+        margin-top: 10px;
+      }
+      
+      .ribbon {
+        flex-direction: column;
+      }
+      
+      .label {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Taya's Timezone Viewer</h1>
+    <div class="header-buttons">
+      <button onclick="shareURL()" id="shareBtn" class="header-btn header-share-btn">Share URL</button>
+      <button onclick="exportData()" class="header-btn header-export-btn">Export JSON</button>
+      <button onclick="triggerImport()" class="header-btn header-import-btn">Import JSON</button>
+      <input type="file" id="fileInput" class="hidden-file-input" accept=".json" onchange="importData(event)">
+    </div>
+  </div>
+
+  <div id="viewer"></div>
+
+  <div class="controls">
+    <input type="text" id="name" placeholder="Enter name" />
+    <select id="timezone">
+      <option value="">Select timezone</option>
+      
+      <!-- Africa -->
+      <optgroup label="Africa">
+        <option value="Africa/Abidjan">Africa/Abidjan</option>
+        <option value="Africa/Accra">Africa/Accra</option>
+        <option value="Africa/Addis_Ababa">Africa/Addis_Ababa</option>
+        <option value="Africa/Algiers">Africa/Algiers</option>
+        <option value="Africa/Cairo">Africa/Cairo</option>
+        <option value="Africa/Casablanca">Africa/Casablanca</option>
+        <option value="Africa/Dar_es_Salaam">Africa/Dar_es_Salaam</option>
+        <option value="Africa/Johannesburg">Africa/Johannesburg</option>
+        <option value="Africa/Lagos">Africa/Lagos</option>
+        <option value="Africa/Nairobi">Africa/Nairobi</option>
+        <option value="Africa/Tunis">Africa/Tunis</option>
+      </optgroup>
+      
+      <!-- America -->
+      <optgroup label="America">
+        <option value="America/Anchorage">America/Anchorage</option>
+        <option value="America/Argentina/Buenos_Aires">America/Argentina/Buenos_Aires</option>
+        <option value="America/Bogota">America/Bogota</option>
+        <option value="America/Caracas">America/Caracas</option>
+        <option value="America/Chicago">America/Chicago</option>
+        <option value="America/Denver">America/Denver</option>
+        <option value="America/Detroit">America/Detroit</option>
+        <option value="America/Guatemala">America/Guatemala</option>
+        <option value="America/Halifax">America/Halifax</option>
+        <option value="America/Havana">America/Havana</option>
+        <option value="America/Jamaica">America/Jamaica</option>
+        <option value="America/Lima">America/Lima</option>
+        <option value="America/Los_Angeles">America/Los_Angeles</option>
+        <option value="America/Mexico_City">America/Mexico_City</option>
+        <option value="America/New_York">America/New_York</option>
+        <option value="America/Panama">America/Panama</option>
+        <option value="America/Phoenix">America/Phoenix</option>
+        <option value="America/Santiago">America/Santiago</option>
+        <option value="America/Sao_Paulo">America/Sao_Paulo</option>
+        <option value="America/St_Johns">America/St_Johns</option>
+        <option value="America/Toronto">America/Toronto</option>
+        <option value="America/Vancouver">America/Vancouver</option>
+        <option value="America/Winnipeg">America/Winnipeg</option>
+      </optgroup>
+      
+      <!-- Antarctica -->
+      <optgroup label="Antarctica">
+        <option value="Antarctica/Casey">Antarctica/Casey</option>
+        <option value="Antarctica/Davis">Antarctica/Davis</option>
+        <option value="Antarctica/Palmer">Antarctica/Palmer</option>
+      </optgroup>
+      
+      <!-- Arctic -->
+      <optgroup label="Arctic">
+        <option value="Arctic/Longyearbyen">Arctic/Longyearbyen</option>
+      </optgroup>
+      
+      <!-- Asia -->
+      <optgroup label="Asia">
+        <option value="Asia/Almaty">Asia/Almaty</option>
+        <option value="Asia/Baghdad">Asia/Baghdad</option>
+        <option value="Asia/Baku">Asia/Baku</option>
+        <option value="Asia/Bangkok">Asia/Bangkok</option>
+        <option value="Asia/Beijing">Asia/Beijing</option>
+        <option value="Asia/Calcutta">Asia/Calcutta</option>
+        <option value="Asia/Colombo">Asia/Colombo</option>
+        <option value="Asia/Damascus">Asia/Damascus</option>
+        <option value="Asia/Dhaka">Asia/Dhaka</option>
+        <option value="Asia/Dubai">Asia/Dubai</option>
+        <option value="Asia/Hong_Kong">Asia/Hong_Kong</option>
+        <option value="Asia/Jakarta">Asia/Jakarta</option>
+        <option value="Asia/Jerusalem">Asia/Jerusalem</option>
+        <option value="Asia/Kabul">Asia/Kabul</option>
+        <option value="Asia/Karachi">Asia/Karachi</option>
+        <option value="Asia/Kathmandu">Asia/Kathmandu</option>
+        <option value="Asia/Kolkata">Asia/Kolkata</option>
+        <option value="Asia/Kuala_Lumpur">Asia/Kuala_Lumpur</option>
+        <option value="Asia/Kuwait">Asia/Kuwait</option>
+        <option value="Asia/Manila">Asia/Manila</option>
+        <option value="Asia/Muscat">Asia/Muscat</option>
+        <option value="Asia/Riyadh">Asia/Riyadh</option>
+        <option value="Asia/Seoul">Asia/Seoul</option>
+        <option value="Asia/Shanghai">Asia/Shanghai</option>
+        <option value="Asia/Singapore">Asia/Singapore</option>
+        <option value="Asia/Taipei">Asia/Taipei</option>
+        <option value="Asia/Tehran">Asia/Tehran</option>
+        <option value="Asia/Tokyo">Asia/Tokyo</option>
+        <option value="Asia/Ulaanbaatar">Asia/Ulaanbaatar</option>
+        <option value="Asia/Vladivostok">Asia/Vladivostok</option>
+        <option value="Asia/Yakutsk">Asia/Yakutsk</option>
+        <option value="Asia/Yekaterinburg">Asia/Yekaterinburg</option>
+      </optgroup>
+      
+      <!-- Atlantic -->
+      <optgroup label="Atlantic">
+        <option value="Atlantic/Azores">Atlantic/Azores</option>
+        <option value="Atlantic/Bermuda">Atlantic/Bermuda</option>
+        <option value="Atlantic/Canary">Atlantic/Canary</option>
+        <option value="Atlantic/Cape_Verde">Atlantic/Cape_Verde</option>
+        <option value="Atlantic/Reykjavik">Atlantic/Reykjavik</option>
+      </optgroup>
+      
+      <!-- Australia -->
+      <optgroup label="Australia">
+        <option value="Australia/Adelaide">Australia/Adelaide</option>
+        <option value="Australia/Brisbane">Australia/Brisbane</option>
+        <option value="Australia/Darwin">Australia/Darwin</option>
+        <option value="Australia/Hobart">Australia/Hobart</option>
+        <option value="Australia/Melbourne">Australia/Melbourne</option>
+        <option value="Australia/Perth">Australia/Perth</option>
+        <option value="Australia/Sydney">Australia/Sydney</option>
+      </optgroup>
+      
+      <!-- Europe -->
+      <optgroup label="Europe">
+        <option value="Europe/Amsterdam">Europe/Amsterdam</option>
+        <option value="Europe/Athens">Europe/Athens</option>
+        <option value="Europe/Belgrade">Europe/Belgrade</option>
+        <option value="Europe/Berlin">Europe/Berlin</option>
+        <option value="Europe/Brussels">Europe/Brussels</option>
+        <option value="Europe/Bucharest">Europe/Bucharest</option>
+        <option value="Europe/Budapest">Europe/Budapest</option>
+        <option value="Europe/Copenhagen">Europe/Copenhagen</option>
+        <option value="Europe/Dublin">Europe/Dublin</option>
+        <option value="Europe/Helsinki">Europe/Helsinki</option>
+        <option value="Europe/Istanbul">Europe/Istanbul</option>
+        <option value="Europe/Kiev">Europe/Kiev</option>
+        <option value="Europe/Lisbon">Europe/Lisbon</option>
+        <option value="Europe/London">Europe/London</option>
+        <option value="Europe/Madrid">Europe/Madrid</option>
+        <option value="Europe/Moscow">Europe/Moscow</option>
+        <option value="Europe/Oslo">Europe/Oslo</option>
+        <option value="Europe/Paris">Europe/Paris</option>
+        <option value="Europe/Prague">Europe/Prague</option>
+        <option value="Europe/Rome">Europe/Rome</option>
+        <option value="Europe/Stockholm">Europe/Stockholm</option>
+        <option value="Europe/Vienna">Europe/Vienna</option>
+        <option value="Europe/Warsaw">Europe/Warsaw</option>
+        <option value="Europe/Zurich">Europe/Zurich</option>
+      </optgroup>
+      
+      <!-- Indian -->
+      <optgroup label="Indian">
+        <option value="Indian/Maldives">Indian/Maldives</option>
+        <option value="Indian/Mauritius">Indian/Mauritius</option>
+      </optgroup>
+      
+      <!-- Pacific -->
+      <optgroup label="Pacific">
+        <option value="Pacific/Auckland">Pacific/Auckland</option>
+        <option value="Pacific/Fiji">Pacific/Fiji</option>
+        <option value="Pacific/Guam">Pacific/Guam</option>
+        <option value="Pacific/Honolulu">Pacific/Honolulu</option>
+        <option value="Pacific/Marquesas">Pacific/Marquesas</option>
+        <option value="Pacific/Midway">Pacific/Midway</option>
+        <option value="Pacific/Nauru">Pacific/Nauru</option>
+        <option value="Pacific/Norfolk">Pacific/Norfolk</option>
+        <option value="Pacific/Pago_Pago">Pacific/Pago_Pago</option>
+        <option value="Pacific/Samoa">Pacific/Samoa</option>
+        <option value="Pacific/Tahiti">Pacific/Tahiti</option>
+        <option value="Pacific/Tongatapu">Pacific/Tongatapu</option>
+      </optgroup>
+      
+      <!-- UTC -->
+      <optgroup label="UTC">
+        <option value="UTC">UTC</option>
+      </optgroup>
+    </select>
+    <button onclick="addPerson()">Add Person</button>
+  </div>
+
+  <script>
+    function getCurrentOffsetForTimezone(timezone) {
+      try {
+        const now = new Date();
+        
+        // Get the timezone offset using Intl.DateTimeFormat
+        const formatter = new Intl.DateTimeFormat('en', {
+          timeZone: timezone,
+          timeZoneName: 'longOffset'
+        });
+        
+        const parts = formatter.formatToParts(now);
+        const timeZoneName = parts.find(part => part.type === 'timeZoneName')?.value;
+        
+        if (timeZoneName) {
+          // Parse offset from string like "GMT+02:00" or "GMT-05:00"
+          const match = timeZoneName.match(/GMT([+-])(\d{2}):(\d{2})/);
+          if (match) {
+            const sign = match[1] === '+' ? 1 : -1;
+            const hours = parseInt(match[2]);
+            const minutes = parseInt(match[3]);
+            return sign * (hours + minutes / 60);
+          }
+        }
+        
+        // Fallback method using time difference
+        const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const targetTime = new Date(utcTime);
+        
+        // Format both dates and calculate difference
+        const utcStr = new Intl.DateTimeFormat('en-CA', {
+          timeZone: 'UTC',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }).format(targetTime);
+        
+        const targetStr = new Intl.DateTimeFormat('en-CA', {
+          timeZone: timezone,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }).format(targetTime);
+        
+        const utcDate = new Date(utcStr.replace(',', ''));
+        const targetDate = new Date(targetStr.replace(',', ''));
+        
+        const offsetMs = targetDate.getTime() - utcDate.getTime();
+        return Math.round(offsetMs / (1000 * 60 * 60));
+        
+      } catch (e) {
+        console.warn(`Invalid timezone: ${timezone}`);
+        throw e;
+      }
+    }
+
+    function getZonesFromURL() {
+      const query = new URLSearchParams(window.location.search);
+      const encoded = query.get("d");
+      if (!encoded) return {};
+      
+      try {
+        const jsonStr = decodeURIComponent(escape(atob(encoded)));
+        return JSON.parse(jsonStr);
+      } catch (e) {
+        console.warn('Failed to decode URL data:', e);
+        return {};
+      }
+    }
+
+    function updateURL(zones) {
+      const jsonStr = JSON.stringify(zones);
+      const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+      const newURL = `${window.location.pathname}?d=${encoded}`;
+      window.history.replaceState(null, '', newURL);
+    }
+
+    function renderViewer() {
+      const zones = getZonesFromURL();
+      const viewer = document.getElementById("viewer");
+      viewer.innerHTML = "";
+
+      // Show empty state if no zones
+      if (Object.keys(zones).length === 0) {
+        viewer.innerHTML = `
+          <div class="empty-state">
+            <h3>No timezones added yet</h3>
+            <p>Add people and their timezones to see the overlap visualization</p>
+          </div>
+        `;
+        return;
+      }
+
+      const nowUTC = new Date();
+      const currentHourUTC = nowUTC.getUTCHours();
+
+      // Convert timezone names to offset data and sort by offset
+      const zoneData = Object.entries(zones).map(([timezone, people]) => {
+        try {
+          const offset = getCurrentOffsetForTimezone(timezone);
+          return { timezone, people, offset };
+        } catch (e) {
+          console.warn(`Invalid timezone: ${timezone}`);
+          return null;
+        }
+      }).filter(Boolean).sort((a, b) => a.offset - b.offset);
+
+      zoneData.forEach(({ timezone, people, offset }) => {
+        const container = document.createElement("div");
+        container.className = "ribbon";
+
+        const label = document.createElement("div");
+        label.className = "label";
+        
+        const offsetStr = offset >= 0 ? `UTC+${offset}` : `UTC${offset}`;
+        
+        const timezoneName = document.createElement("div");
+        timezoneName.className = "timezone-name";
+        timezoneName.textContent = `${timezone} (${offsetStr})`;
+        label.appendChild(timezoneName);
+        
+        const peopleContainer = document.createElement("div");
+        peopleContainer.className = "people-list";
+        
+        const peopleCount = document.createElement("span");
+        peopleCount.textContent = `${people.length} ${people.length === 1 ? 'Person' : 'People'}: `;
+        peopleContainer.appendChild(peopleCount);
+        
+        people.forEach(person => {
+          const personTag = document.createElement("span");
+          personTag.className = "person-tag";
+          personTag.textContent = person;
+          personTag.title = `Click to remove ${person}`;
+          personTag.onclick = () => confirmRemovePerson(timezone, person);
+          
+          peopleContainer.appendChild(personTag);
+        });
+        
+        label.appendChild(peopleContainer);
+        container.appendChild(label);
+
+        const strip = document.createElement("div");
+        strip.className = "time-strip";
+
+        // Center the current hour by showing 12 hours before and 12 hours after
+        for (let i = 0; i < 24; i++) {
+          // Shift the display so current hour is at position 9 (one further left from position 10)
+          const utcHour = (currentHourUTC - 9 + i + 24) % 24;
+          const localHour = (utcHour + offset + 24) % 24;
+          const hourBox = document.createElement("div");
+          hourBox.className = "hour";
+          
+          // Add night hours class for styling
+          if (localHour >= 22 || localHour <= 6) {
+            hourBox.classList.add("night-hours");
+          }
+          
+          hourBox.textContent = `${localHour.toString().padStart(2, '0')}:00`;
+          
+          // Highlight current hour (should be at position 12)
+          if (utcHour === currentHourUTC) {
+            hourBox.classList.add("current");
+          }
+          
+          // Add tooltip
+          hourBox.title = `${localHour.toString().padStart(2, '0')}:00 in ${timezone}`;
+          
+          strip.appendChild(hourBox);
+        }
+
+        container.appendChild(strip);
+        viewer.appendChild(container);
+      });
+    }
+
+    function addPerson() {
+      const nameInput = document.getElementById("name");
+      const timezoneSelect = document.getElementById("timezone");
+      const name = nameInput.value.trim();
+      const timezone = timezoneSelect.value;
+
+      // Reset input styles
+      nameInput.style.borderColor = "";
+      timezoneSelect.style.borderColor = "";
+
+      if (!name) {
+        nameInput.style.borderColor = "#e74c3c";
+        nameInput.focus();
+        return;
+      }
+
+      if (!timezone) {
+        timezoneSelect.style.borderColor = "#e74c3c";
+        timezoneSelect.focus();
+        return;
+      }
+
+      // Validate timezone
+      try {
+        getCurrentOffsetForTimezone(timezone);
+      } catch (e) {
+        timezoneSelect.style.borderColor = "#e74c3c";
+        timezoneSelect.focus();
+        return;
+      }
+
+      const zones = getZonesFromURL();
+      if (!zones[timezone]) zones[timezone] = [];
+      zones[timezone].push(name);
+
+      updateURL(zones);
+      renderViewer();
+
+      nameInput.value = "";
+      timezoneSelect.value = "";
+      
+      // Success feedback
+      nameInput.style.borderColor = "#27ae60";
+      setTimeout(() => {
+        nameInput.style.borderColor = "";
+      }, 1000);
+    }
+
+    function confirmRemovePerson(timezone, person) {
+      const confirmed = confirm(`Are you sure you want to remove ${person} from ${timezone}?`);
+      if (confirmed) {
+        removePerson(timezone, person);
+      }
+    }
+
+    function removePerson(timezone, person) {
+      const zones = getZonesFromURL();
+      if (!zones[timezone]) return;
+      
+      // Remove the person from the timezone
+      const index = zones[timezone].indexOf(person);
+      if (index > -1) {
+        zones[timezone].splice(index, 1);
+        
+        // If no people left in this timezone, remove the timezone entirely
+        if (zones[timezone].length === 0) {
+          delete zones[timezone];
+        }
+        
+        updateURL(zones);
+        renderViewer();
+      }
+    }
+
+    function shareURL() {
+      const currentURL = window.location.href;
+      const shareBtn = document.getElementById('shareBtn');
+      
+      // Try to copy to clipboard
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(currentURL).then(() => {
+          // Success feedback
+          const originalText = shareBtn.textContent;
+          shareBtn.textContent = 'Copied!';
+          shareBtn.classList.add('copied');
+          
+          setTimeout(() => {
+            shareBtn.textContent = originalText;
+            shareBtn.classList.remove('copied');
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy to clipboard:', err);
+          fallbackCopyToClipboard(currentURL);
+        });
+      } else {
+        // Fallback for older browsers or non-HTTPS
+        fallbackCopyToClipboard(currentURL);
+      }
+    }
+    
+    function fallbackCopyToClipboard(text) {
+      const shareBtn = document.getElementById('shareBtn');
+      
+      // Create a temporary textarea to hold the text
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        // Success feedback
+        const originalText = shareBtn.textContent;
+        shareBtn.textContent = 'Copied!';
+        shareBtn.classList.add('copied');
+        
+        setTimeout(() => {
+          shareBtn.textContent = originalText;
+          shareBtn.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+        // Show the URL in an alert as last resort
+        alert(`Copy this URL to share: ${text}`);
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+
+    function exportData() {
+      const zones = getZonesFromURL();
+      
+      if (Object.keys(zones).length === 0) {
+        alert('No timezone data to export. Please add some people and timezones first.');
+        return;
+      }
+      
+      const dataToExport = {
+        version: "1.0",
+        exportDate: new Date().toISOString(),
+        timezones: zones
+      };
+      
+      const jsonString = JSON.stringify(dataToExport, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `timezone-viewer-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    function triggerImport() {
+      const fileInput = document.getElementById('fileInput');
+      fileInput.click();
+    }
+    
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      if (!file.name.endsWith('.json')) {
+        alert('Please select a JSON file.');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          
+          // Validate the imported data structure
+          if (!importedData.timezones || typeof importedData.timezones !== 'object') {
+            alert('Invalid file format. The JSON file must contain a "timezones" object.');
+            return;
+          }
+          
+          // Validate each timezone and its people
+          const validatedZones = {};
+          let hasValidData = false;
+          
+          for (const [timezone, people] of Object.entries(importedData.timezones)) {
+            if (Array.isArray(people) && people.length > 0) {
+              try {
+                // Validate the timezone by trying to get its offset
+                getCurrentOffsetForTimezone(timezone);
+                
+                // Filter out empty or invalid names
+                const validPeople = people.filter(person => 
+                  typeof person === 'string' && person.trim().length > 0
+                );
+                
+                if (validPeople.length > 0) {
+                  validatedZones[timezone] = validPeople;
+                  hasValidData = true;
+                }
+              } catch (e) {
+                console.warn(`Skipping invalid timezone: ${timezone}`);
+              }
+            }
+          }
+          
+          if (!hasValidData) {
+            alert('No valid timezone data found in the file.');
+            return;
+          }
+          
+          // Ask user if they want to replace or merge with existing data
+          const currentZones = getZonesFromURL();
+          const hasExistingData = Object.keys(currentZones).length > 0;
+          
+          let shouldProceed = true;
+          let shouldMerge = false;
+          
+          if (hasExistingData) {
+            const userChoice = confirm(
+              'You have existing timezone data. Click OK to merge with imported data, or Cancel to replace all existing data.'
+            );
+            
+            if (userChoice === null) {
+              shouldProceed = false;
+            } else {
+              shouldMerge = userChoice;
+            }
+          }
+          
+          if (!shouldProceed) return;
+          
+          let finalZones = {};
+          
+          if (shouldMerge) {
+            // Merge existing data with imported data
+            finalZones = { ...currentZones };
+            
+            for (const [timezone, people] of Object.entries(validatedZones)) {
+              if (finalZones[timezone]) {
+                // Merge people, avoiding duplicates
+                const existingPeople = new Set(finalZones[timezone]);
+                people.forEach(person => {
+                  if (!existingPeople.has(person)) {
+                    finalZones[timezone].push(person);
+                  }
+                });
+              } else {
+                finalZones[timezone] = people;
+              }
+            }
+          } else {
+            // Replace all existing data
+            finalZones = validatedZones;
+          }
+          
+          updateURL(finalZones);
+          renderViewer();
+          
+          const importedCount = Object.keys(validatedZones).length;
+          const totalPeople = Object.values(validatedZones).reduce((sum, people) => sum + people.length, 0);
+          
+          alert(`Successfully imported ${totalPeople} people across ${importedCount} timezone${importedCount === 1 ? '' : 's'}.`);
+          
+        } catch (error) {
+          console.error('Import error:', error);
+          alert('Error parsing JSON file. Please ensure it\'s a valid JSON file exported from this application.');
+        }
+      };
+      
+      reader.readAsText(file);
+      
+      // Reset the file input
+      event.target.value = '';
+    }
+
+    renderViewer();
+  </script>
+</body>
+</html>
