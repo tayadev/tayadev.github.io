@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Taya Ueberwasser – Resume</title>
+        <style>
+            @page {
+                size: A4;
+                margin: 1.5cm 2cm;
+            }
+
+            @media print {
+                * {
+                    -webkit-print-color-adjust: exact !important;
+                    color-adjust: exact !important;
+                }
+
+                body {
+                    margin: 0;
+                    padding: 0;
+                    font-size: 11pt;
+                    line-height: 1.4;
+                }
+
+                h1 {
+                    font-size: 22pt;
+                    margin-bottom: 0.5cm;
+                }
+
+                h2 {
+                    font-size: 14pt;
+                    margin-top: 0.8cm;
+                    margin-bottom: 0.4cm;
+                    page-break-after: avoid;
+                }
+
+                p,
+                li {
+                    font-size: 10pt;
+                    line-height: 1.4;
+                }
+
+                .header-section {
+                    page-break-after: avoid;
+                    margin-bottom: 1cm;
+                }
+
+                .job-entry,
+                .project-entry,
+                .skills-grid {
+                    page-break-inside: avoid;
+                }
+
+                .photo {
+                    border: 1px solid #000;
+                    background: white;
+                }
+
+                .mono {
+                    background: white;
+                    border: 1px solid #ccc;
+                }
+
+                .skill-category {
+                    background: white;
+                }
+            }
+
+            body {
+                font-family: "Times New Roman", Times, serif;
+                background: white;
+                color: #000;
+                padding: 0;
+                margin: 0;
+                line-height: 1.5;
+            }
+
+            h1 {
+                font-size: 24pt;
+                font-weight: bold;
+                margin-bottom: 0.8cm;
+                color: #1a1a1a;
+                text-align: center;
+                border-bottom: 2px solid #333;
+                padding-bottom: 0.3cm;
+            }
+
+            h2 {
+                font-size: 16pt;
+                font-weight: bold;
+                margin-top: 1.2cm;
+                margin-bottom: 0.5cm;
+                color: #1a1a1a;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border-bottom: 1px solid #333;
+                padding-bottom: 0.2cm;
+            }
+
+            h2:first-of-type {
+                margin-top: 0.8cm;
+            }
+
+            p {
+                font-size: 11pt;
+                margin-bottom: 0.5cm;
+                text-align: justify;
+                color: #1a1a1a;
+            }
+
+            .profile-text {
+                text-align: justify;
+                margin-bottom: 1cm;
+            }
+
+            li {
+                font-size: 11pt;
+                margin-bottom: 0.3cm;
+                color: #1a1a1a;
+            }
+
+            .header-section {
+                display: grid;
+                grid-template-columns: 1fr 3.5cm;
+                gap: 1.5cm;
+                margin-bottom: 1cm;
+                align-items: start;
+            }
+
+            .contact-info {
+                grid-column: 1;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1cm;
+            }
+
+            .contact-info p {
+                margin-bottom: 0.3cm;
+                font-size: 11pt;
+                display: flex;
+                align-items: start;
+                gap: 0.5cm;
+                text-align: left;
+            }
+
+            .contact-info strong {
+                color: #1a1a1a;
+                font-weight: bold;
+                min-width: 2cm;
+            }
+
+            .contact-info a {
+                color: #1a1a1a;
+                text-decoration: underline;
+            }
+
+            .photo {
+                width: 3.5cm;
+                height: 4.5cm;
+                background: white;
+                border: 1px solid #666;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10pt;
+                color: #666;
+                flex-shrink: 0;
+                overflow: hidden;
+            }
+
+            .photo img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+
+            .mono {
+                font-family: "Courier New", Courier, monospace;
+                font-size: 10pt;
+                background: white;
+                padding: 1px 3px;
+                border: 1px solid #ccc;
+                border-radius: 2px;
+                color: #1a1a1a;
+                font-weight: normal;
+            }
+
+            .job-entry {
+                margin-bottom: 1cm;
+            }
+
+            .job-header {
+                margin-bottom: 0.3cm;
+            }
+
+            .job-title {
+                font-weight: bold;
+                color: #1a1a1a;
+                display: inline;
+                font-size: 12pt;
+            }
+
+            .job-meta {
+                float: right;
+                font-style: italic;
+                color: #333;
+                font-size: 10pt;
+            }
+
+            .project-entry {
+                margin-bottom: 0.8cm;
+            }
+
+            .project-title {
+                font-weight: bold;
+                color: #1a1a1a;
+                margin-bottom: 0.2cm;
+                font-size: 12pt;
+            }
+
+            ul {
+                margin-top: 0.2cm;
+                margin-bottom: 0.8cm;
+                padding-left: 1.2cm;
+            }
+
+            ul li {
+                margin-bottom: 0.2cm;
+            }
+
+            .skills-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.4cm;
+                margin-top: 0.3cm;
+            }
+
+            .skill-category {
+                background: white;
+                padding: 0.3cm;
+                border: 1px solid #333;
+                border-radius: 3px;
+            }
+
+            .skill-category strong {
+                color: #1a1a1a;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 0.2cm;
+            }
+
+            .languages-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .languages-list li {
+                display: inline-block;
+                margin-right: 2cm;
+                padding: 0.2cm 0.5cm;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+            }
+
+            .platforms-skill {
+                grid-column: 1 / -1;
+                margin-top: 0.2cm;
+            }
+
+            .content-wrapper {
+                max-width: 17cm;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content-wrapper">
+            <h1>Taya Ueberwasser</h1>
+
+            <div class="header-section">
+                <div class="contact-info">
+                    <div>
+                        <p>
+                            <strong>Email:</strong>
+                            <a href="mailto:taya@taya.net">taya@taya.net</a>
+                        </p>
+                        <p>
+                            <strong>Website:</strong>
+                            <a href="https://taya.net">taya.net</a>
+                        </p>
+                        <p><strong>Location:</strong> Zürich, Switzerland</p>
+                    </div>
+                    <div>
+                        <p><strong>Birthday:</strong> 22.09.2003</p>
+                        <p>
+                            <strong>Languages:</strong> German (native), English
+                            (fluent)
+                        </p>
+                    </div>
+                </div>
+                <div class="photo">
+                    <img
+                        src="taya_clean_bg_cropped.png"
+                        alt="Taya standing in front of a white wall"
+                    />
+                </div>
+            </div>
+
+            <h2>About Me</h2>
+            <div class="profile-text">
+                <p>
+                    I'm a Self-taught full-stack developer with strong
+                    experience in DevOps, infrastructure, automation, and
+                    observability. I've led projects involving real-world
+                    reliability, developer tooling, and scaling systems. Through
+                    real-world projects, open-source collaboration, and deep
+                    technical exploration, I've gained professional-level
+                    experience in systems development and DevOps. I'm passionate
+                    about open-source, systems design, and empowering teams
+                    through great tooling.
+                </p>
+            </div>
+
+            <h2>Experience</h2>
+
+            <div class="job-entry">
+                <div class="job-header">
+                    <span class="job-title"
+                        >Freelance Developer & DevOps Engineer</span
+                    >
+                    <span class="job-meta">Remote | 2020–Present</span>
+                </div>
+                <ul>
+                    <li>
+                        Built infrastructure with Linux, Docker, Ansible, and
+                        NixOS
+                    </li>
+                    <li>
+                        Managed CI/CD pipelines using GitHub Actions and GitLab
+                        CI
+                    </li>
+                    <li>Monitoring and alerting via Prometheus and Grafana</li>
+                    <li>
+                        Freelance development work across frontend and backend
+                        development for clients
+                    </li>
+                </ul>
+            </div>
+
+            <div class="job-entry">
+                <div class="job-header">
+                    <span class="job-title"
+                        >Tooling Developer – Microsoft Partner Game Studio</span
+                    >
+                    <span class="job-meta">Zürich | Contract</span>
+                </div>
+                <ul>
+                    <li>
+                        Built internal tools in Node.js to support development
+                        workflows
+                    </li>
+                    <li>
+                        Helped extract/refactor code to be more portable between
+                        projects
+                    </li>
+                    <li>CI/CD automation using GitHub Actions</li>
+                </ul>
+            </div>
+
+            <h2>Selected Projects</h2>
+
+            <div class="project-entry">
+                <div class="project-title">climatestrike.ch</div>
+                <ul>
+                    <li>
+                        Led and coordinated a team of developers and designers
+                    </li>
+                    <li>
+                        Developed with TypeScript, Next.js and a custom backend
+                        CMS
+                    </li>
+                    <li>
+                        CI/CD deployed to self-managed Linux server with nginx
+                    </li>
+                    <li>
+                        Used by thousands of activists and hundreds of thousands
+                        of visitors
+                    </li>
+                </ul>
+            </div>
+
+            <div class="project-entry">
+                <div class="project-title">ClimateStrike Infrastructure</div>
+                <ul>
+                    <li>
+                        Managed Linux server hosting tools for organizing
+                        (Email, Matrix, Nextcloud, Chat Moderation Bots, URL
+                        Shortener)
+                    </li>
+                    <li>Used Docker, Traefik, and Ansible for orchestration</li>
+                </ul>
+            </div>
+
+            <div class="project-entry">
+                <div class="project-title">
+                    Minecraft Tournament Infrastructure
+                </div>
+                <ul>
+                    <li>
+                        Developed and deployed a custom platform built in Java
+                        for a 40+ player event
+                    </li>
+                    <li>
+                        Used Ansible for deployment and Grafana for monitoring
+                    </li>
+                </ul>
+            </div>
+
+            <div class="project-entry">
+                <div class="project-title">Homelab</div>
+                <ul>
+                    <li>Self-hosted services on Proxmox using NixOS</li>
+                    <li>
+                        SSO with Authentik, monitoring with Grafana, proxy via
+                        Traefik
+                    </li>
+                </ul>
+            </div>
+
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <strong>Languages:</strong>
+                    Lua, JavaScript/TypeScript, Java, C#, HTML/CSS, Python, Bash
+                </div>
+                <div class="skill-category">
+                    <strong>DevOps & Infrastructure:</strong>
+                    Docker, Ansible, NixOS, GitHub Actions, GitLab CI, Traefik,
+                </div>
+                <div class="skill-category">
+                    <strong>Monitoring:</strong>
+                    Prometheus, Grafana
+                </div>
+                <div class="skill-category">
+                    <strong>Databases:</strong>
+                    MongoDB, PostgreSQL, MySQL, Redis
+                </div>
+                <div class="skill-category">
+                    <strong>Platforms:</strong>
+                    Web, Desktop, Linux Servers, Cloud, Containers, Proxmox
+                </div>
+                <div class="skill-category">
+                    <strong>Tools:</strong>
+                    Vim, Git, VSCode
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
